@@ -1,0 +1,165 @@
+﻿<Window x:Class="Revit_ServerBrowser.App.Plugins.RevitServerBrowser.UserControls.Views.Window_RSB"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Revit_ServerBrowser.App.Plugins.RevitServerBrowser.UserControls.Views"
+        xmlns:vm="clr-namespace:Revit_ServerBrowser.App.Plugins.RevitServerBrowser.UserControls.ViewModels"
+        xmlns:model="clr-namespace:Revit_ServerBrowser.App.Plugins.RevitServerBrowser.UserControls.Models"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Topmost="True"
+        ResizeMode="CanResizeWithGrip"
+        Width="800"
+        Height="500"
+        MinWidth="800"
+        MinHeight="500"
+        MaxWidth="1500"
+        MaxHeight="1200"
+        Title="RSB">
+
+    <!--<Window.DataContext>
+        <vm:MainViewModel />
+    </Window.DataContext>-->
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="CustomStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border Margin="10"
+            BorderThickness="0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+
+                <TextBox FontSize="14"
+                         PreviewMouseDown="TextBoxPreviewMouseDown"
+                         Text="{Binding SearchPredicate, UpdateSourceTrigger=PropertyChanged}" />
+
+                <Button Content="X"
+                        Width="50"
+                        HorizontalAlignment="Right"
+                        Background="Transparent"
+                        Foreground="Gray"
+                        BorderBrush="Gray"
+                        BorderThickness="1"
+                        Click="OnClearSearchString" />
+            </Grid>
+
+            <TreeView Grid.Row="2"
+                      Grid.Column="0"
+                      ItemsSource="{Binding CollectionView}"
+                      VirtualizingStackPanel.IsVirtualizingWhenGrouping="True"
+                      VirtualizingPanel.IsVirtualizing="True"
+                      VirtualizingPanel.VirtualizationMode="Recycling">
+
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate DataType="{x:Type model:ModelItem}"
+                                              ItemsSource="{Binding Items}">
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="5" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Image Grid.Column="0"
+                                   Source="{Binding Path=ItemIcon}"
+                                   Height="16"
+                                   Width="16"
+                                   VerticalAlignment="Center"
+                                   UseLayoutRounding="True"
+                                   RenderOptions.BitmapScalingMode="NearestNeighbor" />
+                            <TextBlock Grid.Column="2"
+                                       Text="{Binding Title}" />
+                        </Grid>
+
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="IsExpanded"
+                                Value="True" />
+                        <Setter Property="Margin"
+                                Value="0, 2, 0, 0" />
+                        <EventSetter Event="Selected"
+                                     Handler="OnSelected" />
+                    </Style>
+                </TreeView.ItemContainerStyle>
+
+            </TreeView>
+
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0"
+                         x:Name="pathTextBox"
+                         FontSize="12"
+                         IsReadOnly="True"
+                         PreviewMouseDown="TextBoxPreviewMouseDown"
+                         Text="{Binding FullPathString, UpdateSourceTrigger=PropertyChanged}" />
+
+                <Button Grid.Column="2"
+                        Content="Выделить путь"
+                        Click="OnSelectStringPath" />
+
+            </Grid>
+
+            <Grid Grid.Row="6"
+                  ToolTipService.ShowOnDisabled="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+
+                <CheckBox Grid.Column="0"
+                          IsChecked="{Binding IsOpenWithAudit}"
+                          Content="Проверить"
+                          VerticalAlignment="Center" />
+                <CheckBox Grid.Column="2"
+                          IsChecked="{Binding IsDetachFromCentral}"
+                          Content="Отсоединить от хранилища"
+                          VerticalAlignment="Center" />
+                <CheckBox Grid.Column="4"
+                          IsEnabled="False"
+                          IsChecked="{Binding IsCreateNewLocal}"
+                          Content="Создать новый локальный"
+                          ToolTip="В разработке :)"
+                          VerticalAlignment="Center" />
+
+                <Button Grid.Column="8"
+                        Click="OnOpenModel"
+                        Content="Открыть"
+                        HorizontalAlignment="Right"
+                        Width="100" />
+            </Grid>
+
+        </Grid>
+    </Border>
+</Window>

@@ -1,0 +1,58 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="using:MSDNSample">
+
+    <!-- Toggle Button -->
+    <Style x:Key="ExpandCollapseToggleStyle"
+           TargetType="ToggleButton">
+        <Setter Property="Focusable"
+                Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid Width="15"
+                          Height="13"
+                          SnapsToDevicePixels="True">
+                        <!-- Rectangle 9x9 pixels -->
+                        <Rectangle Width="9"
+                                   Height="9"
+                                   Stroke="#919191"
+                                   SnapsToDevicePixels="true">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,2"
+                                                     StartPoint="0.5,0">
+                                    <GradientStop Color="White"
+                                                  Offset="0" />
+                                    <GradientStop Color="Silver"
+                                                  Offset="0.5" />
+                                    <GradientStop Color="LightGray"
+                                                  Offset="1" />
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <!-- Vertical line inside rectangle -->
+                        <Rectangle x:Name="ExpandPath"
+                                   Width="1"
+                                   Height="5"
+                                   Stroke="Black"
+                                   SnapsToDevicePixels="true" />
+                        <!-- Horizontal line inside rectangle -->
+                        <Rectangle Width="5"
+                                   Height="1"
+                                   Stroke="Black"
+                                   SnapsToDevicePixels="true" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked"
+                                 Value="True">
+                            <Setter Property="Visibility"
+                                    TargetName="ExpandPath"
+                                    Value="Collapsed" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
